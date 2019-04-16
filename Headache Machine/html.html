@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="dist/paper-full.js"></script>
+    <script type="text/paperscript" canvas="canvas">
+
+var square = new Path.Rectangle({
+  point: view.center,
+  size: [75, 75],
+  strokeColor: "black",
+  strokeWidth: 3,
+  fillColor: "red"
+})
+
+var count = 100;
+var symbol = new Symbol(square);
+var rotateRate = 3;
+var hue = 1;
+
+for (var i = 0; i < count; i++) {
+  var center = Point.random() * view.size;
+  var placedSymbol = symbol.place(center);
+  placedSymbol.scale(i/count);
+}
+
+function onFrame(event){
+  console.log(event.count);
+  console.log(event.time);
+  console.log(event.delta);
+
+  square.rotate(rotateRate);
+  square.fillColor.hue += hue;
+
+  for (var i = 0; i < count; i++) {
+      var item = project.activeLayer.children[i];
+      item.position.x += item.bounds.width/10;
+
+
+  if (item.bounds.left > view.size.width) {
+    item.position.x = -item.bounds.width;
+
+    rotateRate++;
+    }
+  }
+  hue += i;
+}
+
+    </script>
+    <title>Home</title>
+  </head>
+  <body>
+<canvas id="canvas" resize hidpi="off" style="background:black"></canvas>
+  </body>
+</html>
